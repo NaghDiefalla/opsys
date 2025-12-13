@@ -5,19 +5,16 @@ namespace MiniFatFs
 {
     public static class Converter
     {
-        private static readonly Encoding Encoding = Encoding.ASCII; 
-
         public static byte[] StringToBytes(string s)
         {
-            return Encoding.GetBytes(s);
+            // Use ASCII as it's a fixed-width encoding suitable for 8.3 names
+            return Encoding.ASCII.GetBytes(s);
         }
 
         public static string BytesToString(byte[] bytes, int length)
         {
-            if (length > bytes.Length)
-                length = bytes.Length;
-            
-            return Encoding.GetString(bytes, 0, length);
+            // Use ASCII
+            return Encoding.ASCII.GetString(bytes, 0, length);
         }
     }
 }

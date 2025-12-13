@@ -76,6 +76,7 @@ namespace MiniFatFs
 
         public void SetFatEntry(int index, int value)
         {
+            // Note: This check correctly allows writing to cluster 5 (ROOT_DIR_FIRST_CLUSTER) and above
             if (index < FsConstants.CONTENT_START_CLUSTER)
                 throw new ArgumentException($"Cannot write to reserved cluster index {index} (Superblock or FAT region)."); 
             if (index >= _fat.Length)
@@ -83,8 +84,6 @@ namespace MiniFatFs
 
             _fat[index] = value;
         }
-
-        public int[] ReadAllFat() => _fat;
 
         public void WriteAllFat(int[] entries)
         {
@@ -130,6 +129,7 @@ namespace MiniFatFs
 
             List<int> freeClusters = new List<int>();
             
+            // Start searching from CONTENT_START_CLUSTER (Cluster 5)
             for (int i = FsConstants.CONTENT_START_CLUSTER; i < FsConstants.CLUSTER_COUNT; i++)
             {
                 if (GetFatEntry(i) == FsConstants.FAT_ENTRY_FREE)

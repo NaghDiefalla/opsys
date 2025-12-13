@@ -48,7 +48,11 @@ namespace MiniFatFs
 
             if (bytesRead != FsConstants.CLUSTER_SIZE)
             {
-                throw new IOException($"Failed to read full cluster {clusterNumber}.");
+                // This case handles reading beyond the actual data, which can happen 
+                // if the disk was not properly sized.
+                // In a 1MB disk, this should only happen if the cluster num is wrong.
+                // For simplicity, we assume this is an I/O error as per Task 1.
+                throw new IOException($"Failed to read full cluster {clusterNumber}. Read {bytesRead} bytes.");
             }
 
             return data;
@@ -87,7 +91,7 @@ namespace MiniFatFs
 
         private void ValidateCluster(int clusterNumber)
         {
-            if (clusterNumber < FsConstants.SUPERBLOCK_CLUSTER || clusterNumber > FsConstants.MAX_CLUSTER_NUM)
+            if (clusterNumber < 0 || clusterNumber > FsConstants.MAX_CLUSTER_NUM)
             {
                 throw new ArgumentOutOfRangeException(nameof(clusterNumber), 
                     $"Cluster number {clusterNumber} is out of bounds (0 to {FsConstants.MAX_CLUSTER_NUM}).");

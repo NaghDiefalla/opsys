@@ -22,5 +22,9 @@ namespace MiniFatFs
         public const int ROOT_DIR_FIRST_CLUSTER = 5; 
 
         public const int MAX_CLUSTER_NUM = CLUSTER_COUNT - 1; 
+
+        // Directory Constants derived from your implementation
+        public const int DIRECTORY_ENTRY_SIZE = 32;
+        public const int MAX_ENTRIES_PER_CLUSTER = CLUSTER_SIZE / DIRECTORY_ENTRY_SIZE; // 32 entries
     }
 }
